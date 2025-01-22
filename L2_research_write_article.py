@@ -112,7 +112,7 @@ crew = Crew(
     verbose=2
 )
 
-result = crew.kickoff(inputs={"topic": "Learning Java Back-End Development"})
+result = crew.kickoff(inputs={"topic": "Learning Java Back-End Development "})
 
 from IPython.display import Markdown
 Markdown(result)
