@@ -15,6 +15,33 @@ from crewai_tools import SerperDevTool, \
                          FileReadTool, \
                          PDFSearchTool
 
+search_tool = SerperDevTool();
+scrape_tool = ScrapeWebsiteTool();
+
+# Agent 1: Looks up the company information
+company_lookup = Agent(
+
+    role="Company Lookup",
+    goal="""Find information about the company {company_name} to help the user understand the company's mission, values, and culture, especially identifying
+          their most recent projects relating to {role} roles.""",
+    backstory="You are working on finding information about the company {company_name} to help the user understand the company's mission, values, and culture.",
+    allow_delegation=False,
+    tools=[search_tool, scrape_tool],
+    verbose=True
+)
+
+# Agent 2: Looks at the job description, espcially the where it is located and the job title itself
+job_description = Agent(
+    role="Job Description",
+    goal="Analyze the job description for the role of {job_title} at {company_name} located at {location} to understand the desired skills and preferred skills.",
+    backstory="You are working on analyzing the job description for the role of {job_title} at {company_name} to understand the desired skills and preferred skills.",
+    allow_delegation=False,
+    tools=[search_tool, scrape_tool],
+    verbose=True
+)
+
+### ####
+#Testing the agents for my personal use
 planner = Agent(
     role="Star Planner",
     goal="Plan a factual and precise 'How-to' using the topic {topic}",
@@ -86,6 +113,10 @@ plan = Task(
     agent=planner,
 )
 
+# try making a json file where it has company name, location, job title, date, spots available, desired skills listed in the description, and pay
+# try out human_input = True
+# try out async_execution, can make it work with async tasks
+
 plan2 = Task(
     description=(
         "1. Prioritize the highlights of the given resume from the user.\n"
@@ -125,7 +156,15 @@ crew = Crew(
     verbose = 2
 )
 
-result = crew.kickoff(inputs={"topic": "STAR method", "major":"Computer Science", "level":"entry", "role":"Junior Developer", "skills":["Java", "Python", "SQL"]})
+inputss = {
+    "topic": "STAR method",
+    "major": "Computer Science",
+    "level": "entry",
+    "role": "Junior Developer",
+    "skills": ["Java", "Python", "SQL"]
+}
+
+result = crew.kickoff(inputs=inputss)
 
 from IPython.display import Markdown
 Markdown(result)
