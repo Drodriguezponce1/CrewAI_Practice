@@ -50,7 +50,7 @@ resume_strategist = Agent(
 # Agent 4: Interview Preparer
 interview_preparer = Agent(
     role="Engineering Interview Preparer",
-    goal="Create interview questions and talking points "
+    goal="Create technical interview questions and talking points "
          "based on the resume and job requirements",
     tools = [scrape_tool, search_tool,
              resume, semantic_search_resume],
@@ -63,3 +63,18 @@ interview_preparer = Agent(
         "job they are applying for."
     )
 )
+
+star_preparer = Agent(
+    role="Star Method Preparer",
+    goal="Prepare STAR method responses for common "
+         "interview questions based on the resume and job requirements",
+    backstory=(
+        "Your expertise lies in crafting compelling STAR method "
+        "responses that effectively showcase a candidate's skills "
+        "and experiences. By aligning these responses with the job "
+        "requirements, you help candidates excel in interviews, "
+        "demonstrating their value to potential employers."
+    ),
+    tools = [scrape_tool, search_tool,
+             resume, semantic_search_resume],
+    verbose=True
