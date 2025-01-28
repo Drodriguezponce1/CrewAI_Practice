@@ -21,15 +21,15 @@ from crewai_tools import SerperDevTool, \
                          
 
 # readng the internet tools
-search_tool = SerperDevTool() # this scapes google
-scrape_tool = ScrapeWebsiteTool(website_url="https://www.northropgrumman.com/", query="Northrop Grumman")  # if no paramters, this scrapes any website found by serper
+search_tool = SerperDevTool(n_results=5) # this scapes google
+scrape_tool = ScrapeWebsiteTool()  # if no paramters, this scrapes any website found by serper
 
 # resume tools
 resume = PDFSearchTool(pdf="C:\\Users\\Daniel\\Desktop\\CrewAI_Practice\\Daniel_J_Rodriguez_Ponce_Resume.pdf")  # Replace with actual initialization
 resume_mdx = FileReadTool(file_path="C:\\Users\\Daniel\\Desktop\\CrewAI_Practice\\res.md")
 
 # company tools
-company = MDXSearchTool(mdx="C:\\Users\\Daniel\\Desktop\\CrewAI_Practice\\company_details.md")
+company = FileReadTool(file_path="C:\\Users\\Daniel\\Desktop\\CrewAI_Practice\\company_details.md")
 
 # Job Description tools
 job_description = JSONSearchTool(json="C:\\Users\\Daniel\\Desktop\\CrewAI_Practice\\job_details.json")
@@ -44,8 +44,7 @@ repos = tool = GithubSearchTool(
 resume_strategist = Agent(
     role="Resume Strategist for Engineers",
     goal="Find all the best ways to make a resume stand out in the {level} level {position} positions.",
-    tools = [scrape_tool, search_tool,
-             resume, resume_mdx, repos],
+    tools = [scrape_tool, search_tool],
     verbose=True,
     backstory=(
         "With a strategic mind and an eye for detail, you "
@@ -73,8 +72,7 @@ star_preparer = Agent(
 resume_rater = Agent(
     role="Resume Rater",
     goal="Rate and analyze the resume based on the job description, company details, and the resume itself to help them stand out",
-    tools = [scrape_tool, search_tool,
-             resume, resume_mdx, company, job_description],
+    tools = [resume, resume_mdx, company, job_description],
     verbose=True,
     backstory=(
         "As a resume rater, you have a keen eye for detail and a "
@@ -103,8 +101,8 @@ interview_preparer = Agent(
 #TASKS Resume strategists, star prep, resume rater, interview prep
 resume_task = Task(
     description="Compile a detailed personal and professional profile "
-        "using the Resume and Github repositories. Utilize tools to extract and "
-        "synthesize information from these sources.",
+        "using the Resume, Github ({github}) URL, and the job description ({job}). Utilize tools to extract and "
+        "synthesize information from these sources. Consider adding more projects that seem like a good fit from the GitHub repositories at {github}.",
     expected_output="A detailed analysis of the resume with suggestions for improvement in a markdown format.",
     agent=resume_strategist,
     asynchronous=True,
@@ -121,15 +119,15 @@ star_task = Task(
 )
 
 resume_rate_task = Task(
-    description="Using the starting resume rate the resume out of 100 based on the job description, company details, and the resume itself."
+    description="Using the starting resume, rate the resume out of 100 based how the resume is compared to the desired skills and qualifications from the company job description."
                 "Next, Using the profile and job requirements obtained from "
                 "previous tasks, tailor the resume to highlight the most "
-                "relevant areas. Employ tools to adjust and enhance the "
+                "relevant qualifications. Employ tools to adjust and enhance the "
                 "resume content. Make sure this is the best resume even but "
                 "don't make up any information. Update every section, "
-                "inlcuding the work experience, project experience, and skills, "
-                "and education. All to better reflrect the candidates "
-                "abilities and how it matches the job posting.",
+                "inlcuding the work experience, project experience, and skills."
+                "All to better reflect the candidates "
+                "abilities and how it matches the job posting. Also consider making better bullet points for each section.",
     expected_output="A detailed rating of the resume with suggestions for improvement.",
     agent=resume_rater,
     context= [resume_task],
@@ -143,7 +141,7 @@ interview_preparer_task = Task(
         "points based on the tailored resume and job requirements. "
         "Utilize tools to generate relevant questions and discussion "
         "points. Make sure to use these question and talking points to "
-        "help the candiadte highlight the main points of the resume "
+        "help the candidate highlight the main points of the resume "
         "and how it matches the job posting."
     ),
     expected_output=(
@@ -158,7 +156,9 @@ interview_preparer_task = Task(
 
 input_data = {
     "level": "entry",
-    "position": "Software Engineer"
+    "position": "Software Engineer",
+    "github": "https://github.com/Drodriguezponce1?tab=repositories",
+    "job": "https://www.northropgrumman.com/jobs/engineering/software/united-states-of-america/oklahoma/oklahoma-city/r10183494/engineer-software-simulation-okc-oklahoma"
 }
 
 crew = Crew(
