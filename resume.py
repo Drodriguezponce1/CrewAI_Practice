@@ -29,6 +29,7 @@ resume_formatter = Agent(
     tools=[resume],
     verbose=True
 )
+
 resume_writer = Task(
     description="Generate a Markdown file with a structured format that includes sections and subsections from the resume",
     expected_output="Format the resume into a markdown file with the different sections. subsections and bullet points found in the resume "
