@@ -69,6 +69,8 @@ overall_description = Agent(
     verbose=True
 )
 
+#TASKS
+
 company_task = Task(
     description="Look up the company information for {company_name} for {role} roles",
     expected_output="All the details of a company including their mission, values, culture, and recent projects related to {role} roles.",
@@ -81,7 +83,7 @@ job_task = Task(
     expected_output="All the details of a specifically gathering data on the job title, date posted, spots available, and the desired skills.",
     human_input=True,
 
-    output_file="job details_details.json",  
+    output_file="job_details.json",  
       # Outputs the venue details as a JSON file
     agent=job_description
 )
