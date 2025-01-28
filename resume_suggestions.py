@@ -34,8 +34,7 @@ repos = tool = GithubSearchTool(
 
 resume_strategist = Agent(
     role="Resume Strategist for Engineers",
-    goal="Find all the best ways to make a "
-         "resume stand out in the job market.",
+    goal="Find all the best ways to make a resume stand out in the {level} level {position} positions.",
     tools = [scrape_tool, search_tool,
              resume, semantic_search_resume, repos],
     verbose=True,
@@ -47,7 +46,6 @@ resume_strategist = Agent(
     )
 )
 
-# Agent 4: Interview Preparer
 interview_preparer = Agent(
     role="Engineering Interview Preparer",
     goal="Create technical interview questions and talking points "
@@ -66,8 +64,7 @@ interview_preparer = Agent(
 
 star_preparer = Agent(
     role="Star Method Preparer",
-    goal="Prepare STAR method responses for common "
-         "interview questions based on the resume and job requirements",
+    goal="Prepare STAR method responses for common interview questions based on the resume and job requirements",
     backstory=(
         "Your expertise lies in crafting compelling STAR method "
         "responses that effectively showcase a candidate's skills "
@@ -78,3 +75,4 @@ star_preparer = Agent(
     tools = [scrape_tool, search_tool,
              resume, semantic_search_resume],
     verbose=True
+)

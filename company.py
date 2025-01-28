@@ -73,18 +73,19 @@ overall_description = Agent(
 
 company_task = Task(
     description="Look up the company information for {company_name} for {role} roles",
-    expected_output="All the details of a company including their mission, values, culture, and recent projects related to {role} roles.",
+    expected_output="All the details of a company including their mission, values, culture, and recent projects related to {role} roles in a markdown format.",
     human_input = True,
-    agent=company_lookup
+    agent=company_lookup,
+    output_file="company_details.md"
 )
 
 job_task = Task(
     description="Gather data from the job description for the role of {job_title} at {company_name} located at {location}",
     expected_output="All the details of a specifically gathering data on the job title, date posted, spots available, and the desired skills.",
     human_input=True,
-
+    output_json = JobDescription,
     output_file="job_details.json",  
-      # Outputs the venue details as a JSON file
+    
     agent=job_description
 )
 
