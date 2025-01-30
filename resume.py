@@ -10,9 +10,9 @@ openai_api_key = get_openai_api_key()
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-4-turbo'
 os.environ["SERPERDEV_API_KEY"] = get_serper_api_key()
 
-from crewai_tools import PDFSearchTool
+from crewai_tools import PDFSearchTool, FileReadTool
 
-resume = PDFSearchTool(pdf="C:\\Users\\Daniel\\Desktop\\CrewAI_Practice\\Daniel_J_Rodriguez_Ponce_Resume.pdf")  # Replace with actual initialization
+resume = PDFSearchTool(pdf="C:\\Users\\Daniel\\Downloads\\Daniel_J._Rodriguez-Ponce.pdf")  # Replace with actual initialization
 
 resume_formatter = Agent(
 
@@ -34,7 +34,7 @@ resume_writer = Task(
     description="Generate a Markdown file with a structured format that includes sections and subsections from the resume",
     expected_output="Format the resume into a markdown file with the different sections. subsections and bullet points found in the resume "
       "and provide a brief summary of the resume at the end of the markdown file",
-    output_file = "res.md",
+    output_file = "res2.md",
     human_input=True,
     agent=resume_formatter
 
